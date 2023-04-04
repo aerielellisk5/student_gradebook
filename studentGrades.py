@@ -15,78 +15,62 @@ class Student:
         print(self.grades)
         if len(self.grades) > 1:
             formatted_grades = ','.join(str(grade) for grade in self.grades)
-            # print(formatted_grades)
             return formatted_grades
         else:
             return self.grades
 
 
-class Classlist:
-    def __init__(self, class_name, students):
-        self.class_name = name
-        self.students = {}
+# class Classlist:
+#     def __init__(self, class_name, students):
+#         self.class_name = class_name
+#         self.students = {}
         
-    def add_new_classname():
-        classname = input("What is the name of the class?")
+#     def add_student_to_class(self, student, grades):
+#         self.students.update({student:grades})
     
-    def add_new_student():
-        name = input("What is the name of the student? ")
     
-
         
         
-        
-        
+    
+add_student_grade = True
 add_student_status = True 
-new_student_status = True   
-# classname = input("What is the name of the class?")             
-# name = input("What is the name of the student? ")
-# new_grades = int(input("What is their grade on the exam? "))
-# I feel like I could create a forloop for this, which would actually be super nice...
-# why do I need to specify that grades is a list when I already specified that self.grades = list?
-# studentA = Student(name, grades=[])
-# print(studentA.name) #prints out the name 
-# print(studentA.get_grades(new_grades)) #prints out the grade
+new_student_status = True  
+classroom = {}
+
+classname = input("What is the name of the class?")
+
+# so the program isnt quite working the way that I want to.  So I probably should go in a fix a few things
+# - thinking about capitalization and bad characters; probably need to refactor and use some try and except statements instead
 
 
-
-
-#2: How to add multiple grades to the list?  
-# probably need to somehow ask all the questions and put it in an if statement?
-
-
-# classname = input("What is the name of the class?")
 while add_student_status == True:
-    response_to_add_student = input("Would you like to add a new student to the gradebook?") 
+    response_to_add_student = input("Would you like to add a new student to the gradebook?").lower()
+    
     if response_to_add_student == "yes":
         name = input("What is the name of the student? ")
         new_student = Student(name, grades= [])
-        while new_student_status == True:
+        while add_student_grade == True:
             new_grades = int(input("What is their grade on the exam? "))
             new_student.add_grades(new_grades)
-            question = input("Would you like to add another grade? Answer Yes or No ")
-            if question == "No":
-                print("Okay")
-                print(str(new_student.grades))
-                new_student_status = False
+            question = input("Would you like to add another grade? Answer Yes or No ").lower()
+            if question == "yes":
+                print("Okay let's do that")
             else:
-                continue
+                print("Okay")
+                classroom.update({new_student.name : new_student.grades})
+                print(str(new_student.grades))
+                # add_student_grade = False
+                break
     else:
         print("No worries, maybe another time! Here is a list of all the students that you've created")
-        print(new_student.name + "is the name.  The scores for this student is: " + ','.join(str(grade) for grade in new_student.grades))
+        # print(new_student.name + "is the name.  The scores for this student is: " + ','.join(str(grade) for grade in new_student.grades))
         add_student_status = False
     
     
+
+print(classroom)
     # try_new_classname = input("Sorry that's not a valid name of a class, would you like to try a different name?")
     # if try_new_classname == str(try_new_classname):
             
         
-    
-
-
-# # studentA = Student(name, grades=[])
-
-# print(studentA.name) #prints out the name 
-# print(studentA.get_grades(new_grades)) #prints out the grade
-
     
