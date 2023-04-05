@@ -30,47 +30,50 @@ class Student:
     
     
         
-        
-    
+new_class = True   
 add_student_grade = True
-add_student_status = True 
-new_student_status = True  
+add_student_status = True   
 classroom = {}
 
-classname = input("What is the name of the class?")
 
-# so the program isnt quite working the way that I want to.  So I probably should go in a fix a few things
-# - thinking about capitalization and bad characters; probably need to refactor and use some try and except statements instead
-
-
-while add_student_status == True:
-    response_to_add_student = input("Would you like to add a new student to the gradebook?").lower()
-    
-    if response_to_add_student == "yes":
-        name = input("What is the name of the student? ")
-        new_student = Student(name, grades= [])
-        while add_student_grade == True:
-            new_grades = int(input("What is their grade on the exam? "))
-            new_student.add_grades(new_grades)
-            question = input("Would you like to add another grade? Answer Yes or No ").lower()
-            if question == "yes":
-                print("Okay let's do that")
-            else:
-                print("Okay")
+while new_class == True:
+    classname = input("What is the name of the class?")
+    if not classname.isalpha():
+        print("The name needs to be alphabet letters only")
+        break
+    while add_student_status == True:
+        # this add_student_status is only used 1x, so I feel like I actually don't need it, but thats probably for another day to refactor this.  So happy it works now =)
+        response_to_add_student = input("Would you like to add a new student to the gradebook?").lower()
+        if response_to_add_student == "yes":
+            name = input("What is the name of the student? ")
+            new_student = Student(name, grades= [])
+            while add_student_grade == True:
+                new_grades = int(input("What is their grade on the exam? "))
+                new_student.add_grades(new_grades)
                 classroom.update({new_student.name : new_student.grades})
-                print(str(new_student.grades))
-                # add_student_grade = False
+                question = input("Would you like to add another grade? Answer Yes or No ").lower()
+                if question == "yes":
+                    print("Okay let's do that")
+                else:
+                    print("Okay")
+                    print(classroom)
+                    print(str(new_student.grades))
+                    break
+        else:
+            print("No worries, maybe another time!")
+            if len(classroom) == 0:
+                print("This should exit the program")
+                new_class = False
                 break
-    else:
-        print("No worries, maybe another time! Here is a list of all the students that you've created")
-        # print(new_student.name + "is the name.  The scores for this student is: " + ','.join(str(grade) for grade in new_student.grades))
-        add_student_status = False
-    
+            else:
+                for student, grade in classroom.items():
+                    print(student + " is the student's name and their grades are: " + ','.join(str(x) for x in grade))                
+                    new_class = False
+                break
+                
+            
     
 
-print(classroom)
-    # try_new_classname = input("Sorry that's not a valid name of a class, would you like to try a different name?")
-    # if try_new_classname == str(try_new_classname):
             
         
     
