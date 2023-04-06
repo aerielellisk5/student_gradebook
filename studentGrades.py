@@ -20,40 +20,40 @@ class Student:
             return self.grades
         
     def average_grade(self, grades):
-        total = 0
-        for i in grades:
-            total = total + i
-        return total
+        if len(grades) > 1:
+            total = 0
+            for i in grades:
+                total = total + i
+            average = total/len(grades)
+        else:
+            average = grades
+        return int(average)
     
-    def highest_score(self, grades):
-        high_score = 0
-        for i in grades:
-            if i > high_score:
-                high_score = i
-            else:
-                continue
-        return high_score
+    def highest_grade(self, grades):
+        high_grade = 0
+        if len(grades) > 1:
+            for i in grades:
+                if i > high_grade:
+                    high_grade = i
+                else:
+                    continue
+        else:
+            high_grade = grades
+        return int(high_grade)
     
-    def lowest_score(self, grades):
-        lowest_score = 100 
-        for i in grades:
-            if i < lowest_score:
-                lowest_score = i
-            else:
-                continue
-        return lowest_score
+    def lowest_grade(self, grades):
+        if len(self.grades) > 1:
+            lowest_grade = 100 
+            for i in grades:
+                if i < lowest_grade:
+                    lowest_grade = i
+                else:
+                    continue
+        else:
+            lowest_grade = grades        
+        return int(lowest_grade)
     
     
-    
-            
-        
-# aeriel = Student("aeriel", [])
-# print("this is outside the method")
-
-# print(aeriel.average_grade([30, 45, 66, 200, 65]))
-# print(aeriel.highest_score([30, 45, 66, 22, 65]))
-# print(aeriel.lowest_score([30, 45, 66, 22, 65]))
-
 # class Classlist:
 #     def __init__(self, class_name, students):
 #         self.class_name = class_name
@@ -66,7 +66,8 @@ class Student:
         
 new_class = True   
 add_student_grade = True
-add_student_status = True   
+add_student_status = True
+user_score_options = True   
 classroom = {}
 
 
@@ -76,9 +77,10 @@ while new_class == True:
         print("The name needs to be alphabet letters only")
         break
     while add_student_status == True:
-        # this add_student_status is only used 1x, so I feel like I actually don't need it, but thats probably for another day to refactor this.  So happy it works now =)
+        add_student_grade = True
         response_to_add_student = input("Would you like to add a new student to the gradebook?").lower()
         if response_to_add_student == "yes":
+            user_score_options = True
             name = input("What is the name of the student? ")
             new_student = Student(name, [])
             while add_student_grade == True:
@@ -92,8 +94,20 @@ while new_class == True:
                     print("Okay")
                     print(classroom)
                     print(str(new_student.grades))
-                    break
-            print("does this ever get ran?")
+                    while user_score_options:
+                        score_options = input("Would you like to see the average, highest or lowest score for this student?")
+                        if score_options.lower() == "average":
+                            print(new_student.average_grade(new_student.grades))
+                        elif score_options.lower() == "highest":
+                            print(new_student.highest_grade(new_student.grades))
+                        elif score_options.lower() == "lowest":
+                            print(new_student.lowest_grade(new_student.grades))
+                        else:
+                            print("No worries, let's head back to the top of the loop.")
+                            add_student_grade = False
+                            user_score_options = False
+                            continue
+        
         else:
             print("No worries, maybe another time!")
             if len(classroom) == 0:
