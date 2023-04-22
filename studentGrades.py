@@ -6,6 +6,7 @@
 #1: Create a class called students w/ a name and grades attribute
 
 import jsonpickle
+import os
 
 class Student:
     # might need to add class here so that the student can keep track of the class that they are in easier?
@@ -78,9 +79,21 @@ class Classlist:
             print(student.get_student_grades())
         # print(students_name)
         
-        
-       
-    
+filename = "classlist.json"
+if os.stat(filename).st_size == 0:
+    print("File is empty")
+else:
+    with open("classlist.json", "r") as file:
+        data = file.read()       
+        database_data = jsonpickle.decode(data)
+        file.close()
+        # to get access to the student data I need to use a for loop
+        for student in database_data.students:
+            print(student.name)
+            print(student.grades)
+
+
+
 
 no_selection = True      
 new_class = True   
@@ -106,29 +119,30 @@ while no_selection:
     elif "exist" in class_type:
         print("exists here")
         no_selection = False
-        classname = input("Which class would you like to add a student to? ")
-         # so right now I have the name of the class, so I need to take that class name, which will be the key in the dictionary, and save that particular key value pair in a variable that I would be able to add to later on. Need to update the other stuff below to use the classlist object I think     
+        current_class_name = input("Which class would you like to add a student to? ")
+        # so currently I can save the data to another file, and then bring it back to this file, so that's good.  I need to edit this part to make sure check and see if the class that is entered already exists, and then make sure that I add additional info to that specific object.
+        if current_class_name  == database_data.classname:
+            current_class = database_data
+        
     while add_student_status == True:
         add_student_grade = True
         response_to_add_student = input("Would you like to add a new student to the gradebook?").lower()
         if response_to_add_student == "yes":
             user_score_options = True
             name = input("What is the name of the student? ")
-            print(name)
             new_student = Student(name, [])
-            print(new_student.name)
             while add_student_grade == True:
                 new_grades = int(input("What is their grade on the exam? "))
                 new_student.add_grades(new_grades)
                 current_class.add_student(new_student)    
-                current_class.show_classlist()
+
                 question = input("Would you like to add another grade? Answer Yes or No ").lower()
                 if question == "yes":
                     print("Okay let's do that")
                 else:
                     print("Okay")
                     current_class.show_classlist()
-                    print(str(new_student.grades))
+
                     while user_score_options:
                         score_options = input("Would you like to see the average, highest or lowest score for this student?")
                         if score_options.lower() == "average":
@@ -156,10 +170,10 @@ while no_selection:
             add_student_status = False
             
 
-# with open("classlist.json", "w") as file:
-#     file.write(jsonpickle.encode(current_class))
+with open("classlist.json", "w") as file:
+    file.write(jsonpickle.encode(current_class))
     
-# file.close()
+file.close()
             
 
 
