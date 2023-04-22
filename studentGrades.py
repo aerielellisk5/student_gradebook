@@ -4,7 +4,11 @@
 # Implement methods to add grades to the student's list, calculate the student's average grade, and get the highest and lowest grades.
 
 #1: Create a class called students w/ a name and grades attribute
+
+import jsonpickle
+
 class Student:
+    # might need to add class here so that the student can keep track of the class that they are in easier?
     def __init__(self, name, grades):
         self.name = name
         self.grades = grades
@@ -12,12 +16,15 @@ class Student:
             
     def add_grades(self, new_grade):
         self.grades.append(new_grade)
-        print(self.grades)
+        # print(self.grades)
         if len(self.grades) > 1:
             formatted_grades = ','.join(str(grade) for grade in self.grades)
             return formatted_grades
         else:
             return self.grades
+        
+    def get_student_grades(self):
+        return self.grades
         
     def average_grade(self, grades):
         if len(grades) > 1:
@@ -53,46 +60,74 @@ class Student:
             lowest_grade = grades        
         return int(lowest_grade)
     
-    
-# class Classlist:
-#     def __init__(self, class_name, students):
-#         self.class_name = class_name
-#         self.students = {}
+    # Should be able to pull what classes each student is in and then which students are in each class (ideally)
+class Classlist:
+    def __init__(self, classname, students):
+        self.classname = classname
+        self.students = students
         
-#     def add_student_to_class(self, student, grades):
-#         self.students.update({student:grades})
-    
-    
+    def add_student(self, student):
+        self.students.append(student)
+            
+    def show_classlist(self):
+        students_name = []
+        for student in self.students:
+            # students_name.append(student.name)
+            print(student.name)
+            print("show me the grade")
+            print(student.get_student_grades())
+        # print(students_name)
         
+        
+       
+    
+
+no_selection = True      
 new_class = True   
 add_student_grade = True
 add_student_status = True
 user_score_options = True   
-classroom = {}
+# classroom = {}
 
-
-while new_class == True:
-    classname = input("What is the name of the class?")
-    if not classname.isalpha():
-        print("The name needs to be alphabet letters only")
-        break
+while no_selection:
+    class_type = input("Would you like to add a student to a new class, or an existing class? Please type new or existing, or q to quit ")
+    if class_type == "q":
+        print("Exiting the program")
+        exit()
+    elif "new" not in class_type and "exist" not in class_type:
+        print(class_type)
+        print("That doesn't seem like a valid answer, try again")
+        continue
+    elif "new" in class_type:
+        no_selection = False
+        # print("new here")
+        classname = input("What is the name of the class you would like to add the student to? ")
+        current_class = Classlist(classname, [])
+    elif "exist" in class_type:
+        print("exists here")
+        no_selection = False
+        classname = input("Which class would you like to add a student to? ")
+         # so right now I have the name of the class, so I need to take that class name, which will be the key in the dictionary, and save that particular key value pair in a variable that I would be able to add to later on. Need to update the other stuff below to use the classlist object I think     
     while add_student_status == True:
         add_student_grade = True
         response_to_add_student = input("Would you like to add a new student to the gradebook?").lower()
         if response_to_add_student == "yes":
             user_score_options = True
             name = input("What is the name of the student? ")
+            print(name)
             new_student = Student(name, [])
+            print(new_student.name)
             while add_student_grade == True:
                 new_grades = int(input("What is their grade on the exam? "))
                 new_student.add_grades(new_grades)
-                classroom.update({new_student.name : new_student.grades})
+                current_class.add_student(new_student)    
+                current_class.show_classlist()
                 question = input("Would you like to add another grade? Answer Yes or No ").lower()
                 if question == "yes":
                     print("Okay let's do that")
                 else:
                     print("Okay")
-                    print(classroom)
+                    current_class.show_classlist()
                     print(str(new_student.grades))
                     while user_score_options:
                         score_options = input("Would you like to see the average, highest or lowest score for this student?")
@@ -110,18 +145,31 @@ while new_class == True:
         
         else:
             print("No worries, maybe another time!")
-            if len(classroom) == 0:
-                print("This should exit the program")
+            # if len(current_class) == 0:
+            #     print("This should exit the program")
                 # new_class = False
                 # add_student_status = False
-            else:
-                for student, grade in classroom.items():
-                    print(student + " is the student's name and their grades are: " + ','.join(str(x) for x in grade))                
+            # else:
+            #     for student, grade in current_class.items():
+            #         print(student + " is the student's name and their grades are: " + ','.join(str(x) for x in grade))                
             new_class = False
             add_student_status = False
-                
             
+
+# with open("classlist.json", "w") as file:
+#     file.write(jsonpickle.encode(current_class))
     
+# file.close()
+            
+
+
+            
+# serialized_obj = jsonpickle.encode(current_class)
+# print(serialized_obj)
+    
+# loaded_classlist = jsonpickle.decode(serialized_obj)
+# print(loaded_classlist.classname)
+
 # teacher level --> class (math/english) --> students --> grades
 # writing to files to act like a database =) using json
-            
+        
